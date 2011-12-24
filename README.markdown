@@ -1,4 +1,5 @@
-### intercom
-## A console for the web
+#intercom
+###A console for the web
 
-Readme Pending.
+Intercom is a JavaScript-based console I/O system designed for 
+easy extension using a module system.
