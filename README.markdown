@@ -116,57 +116,89 @@ console.
 ##3. API
 
 `identifyPlugin(title)`
+
 Identifies a module to intercom to be added to the list of installed modules.
 
+
 `addParser(parser)`
+
 Adds a parser function to the main intercom parser. Used primarily to add _hook 
 functions which pick up on user input to start a program/module.
   
+
 `outputWithCarrot(text)`
+
 Outputs formatted text with the input marker.
 
+
 `clearScreen()`
+
 Clears the output on the screen.
+
+
+`none(input)`
 
 Serves as a null parser. Set the input stream to `none` in order to ignore all 
 input.
-`none(input)`
 
-Outputs text to the console.
+
 `output(text)`
 
-Used to quit the parsing system after a match is made.
+Outputs text to the console.
+
+
 `quitParse()`
 
-Switches the input stream to a different parser.
+Used to quit the parsing system after a match is made.
+
+
 `setInputStream(newStream)`
 
-Set the input stream back to the main parser.
+Switches the input stream to a different parser.
+
+
 `resetInputStream()`
 
-Does a post call to url with the given params array, outputs the return data.
+Set the input stream back to the main parser.
+
+
 `outputPostCall(url, params)`
 
-Does a post call to url with the given params array, returns the return data.
+Does a post call to url with the given params array, outputs the return data.
+
+
 `returnPostCall(url, params)`
+Does a post call to url with the given params array, returns the return data.
+
+
+`extractFlags(input)`
 
 Extracts the user defined flags in a given line of input. Returns an 
 associative array of flag=value, where value is true if the flag is a boolean 
 on/off.
-`extractFlags(input)`
+
+
+`hasFlag(flags, find)`
 
 Given a flags object (see: extractFlags) and a flag, returns true if the flag 
 exists in the set of flags.
-`hasFlag(flags, find)`
 
-Returns the number of user defined flags.
+
 `countFlags(flags)`
 
-Returns the value of a user defined flag.
+Returns the number of user defined flags.
+
+
 `flagValue(flags, key)`
 
-Returns true if the input command matches the given command.
+Returns the value of a user defined flag.
+
+
 `checkCommand(input, command)`
 
-Returns an array of arguments from the given input.
+Returns true if the input command matches the given command.
+
+
 `extractArguments(input)`
+
+Returns an array of arguments from the given input.
