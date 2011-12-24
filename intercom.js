@@ -85,7 +85,7 @@ function parseInput(input){
         outputHelpCommands();
         return
     }
-    // Clear screem
+    // Clear screen
     else if (input == "clear") {
         clearScreen();
         return;

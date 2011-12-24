@@ -7,9 +7,95 @@ easy extension using a module system.
 [Live Demo](http://i.amMichael.com/demo/intercom)
 
 
-##Installation
+#Contents
+1. Installation
+2. Creating Modules
+3. API
+
+##1. Installation
 Installing a setup of intercom is as simple as dropping the project files into 
 your folder of choice.
 To add a module to your installation, add a javascript include line under the 
 specified comment in index.html:
 &lt;script type='text/javascript' src='module_name.js'&gt;&lt;/script&gt;
+
+##2. Creating Modules
+An intercom module is a standardized JavaScript file which is included into the 
+main file with a JS inclusion tag. Creating a module is as simple as creating 
+a new file.
+
+This quick tutorial will create a "Hello World" module. First, create your 
+file, call it hello.js. The first bit of code we need to do is have the module 
+identify itself to intercom. We do this with:
+        identifyPlugin("hello");
+This will be picked up by intercom on page load and will cause intercom to add 
+'hello' to the list of installed plugins.
+
+We can then add the module's parser to the parser list with:
+        addParser(hello_hook);
+This will add hello's hook parser to the parser list for intercom. A parser is 
+simply a function which intercom will pass the user's input to in order to take 
+action on it.
+
+So now we need to actually make the module do something. We do this by defining 
+the parser function:
+        function hello_hook(input) {
+          if (checkCommand(input, "hello")) {
+            output("Hello World!");
+          }
+        }
+We now have a working module! A boring one, but thats better than nothing! Now 
+if you visit your index.html and type the 'hello' command, you'll see your 
+handiwork output back to you.
+
+Let's add a flag to our module's call. Using intercom's flag functionality is 
+pretty simple. We use one function to generate a flags object followed by 
+another function call to check the flags. Let's alter our hook parser function 
+to take a -greeting flag which lets the user set the greeting:
+        function hello_hook(input) {
+          if (checkCommand(input, "hello")) {
+            hello_flags = extractFlags(input);
+            if (hasFlag(hello_flags, "greeting")) {
+              output(flagValue(hello_flags, "greeting"));
+            } else {
+              output("Hello World!");
+            }
+          }
+        }
+So now we can call 'hello -greeting=Wassap' and get a whole new greeting.
+
+NOTE: Strings with more than one word cannot currently be flag values.
+
+Finally, let's cause our hook function to redirect intercom's input to a custom 
+parser. Again, we will update our hook function:
+        function hello_hook(input) {
+          if (checkCommand(input, "hello")) {
+            hello_flags = extractFlags(input);
+            if (hasFlag(hello_flags, "greeting")) {
+              output(flagValue(hello_flags, "greeting"));
+            } else if (hasFlag(hello_flags, "parse")) {
+              quitParse();
+              setInputStream(hello_parser);
+            } else {
+              output("Hello World!");
+            }
+          }
+        }
+Now, when the flag -parse is set, we are changing the input stream from the 
+main input stream to a custom parser. Here we can define the parser to simply 
+output anything which the user types:
+        function hello_parser(input) {
+          output(input);
+          if (input == "quit") {
+            resetInputStream();
+          }
+        }
+We now have a custom input parser with a quit command. Try it out now! Run 
+'hello -parse' in your intercom setup and feel the magic.
+
+That's all there is to it! Using the tools in the API for intercom, you can 
+create online programs and modules which you can quickly run from your intercom 
+console.
+
+##3. API
+
