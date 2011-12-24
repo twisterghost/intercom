@@ -1,5 +1,5 @@
 // Define constants
-var VERSION = "1.0.1.2";
+var VERSION = "1.0.1.3";
 
 // Define variables
 var inputStream = parseInput;
@@ -154,6 +154,9 @@ function openPage(url, ignorehttp, fix) {
   output("<iframe src='" + url + "' width='100%' height='80%'>");
 }
 
+/**
+ * Opens a page after taking modification commands
+ */
 function openPageCheckUrl(input) {
   if (input == "y" || input == "yes") {
     resetInputStream();
@@ -166,9 +169,6 @@ function openPageCheckUrl(input) {
     openPage("http://" + tempUrl);
   }
 }
-
-
-
 
 // Begin API functions
 
@@ -201,13 +201,15 @@ function clearScreen() {
     $('#output').html('');
 }
 
+/**
+ * Serves as a null function
+ */
 function none(input) {
   // Blank!
 }
 
 /**
  * Displays the given text on the output of the console
- * @param text
  */
 function output(text){
     $('#output').append(text + "<br />");
@@ -223,7 +225,6 @@ function quitParse() {
 
 /**
  * Switches the input stream to a different parser
- * @param newStream
  */
 function setInputStream(newStream) {
     inputStream = newStream;
@@ -238,8 +239,7 @@ function resetInputStream() {
 }
 
 /**
- * Does a post call to url with the given params array, outputs the
- * return
+ * Does a post call to url with the given params array, outputs the return data
  */
 function outputPostCall(url, params) {
   setInputStream(none);
@@ -251,7 +251,7 @@ function outputPostCall(url, params) {
 
 /**
  * Does a post call to url with the given params array, returns the
- * return
+ * return data
  */
 function returnPostCall(url, params) {
   setInputStream(none);
@@ -261,6 +261,11 @@ function returnPostCall(url, params) {
       });
 }
 
+/**
+ * Extracts the user defined flags in a given line of input.
+ * Returns an associative array of flag=value, where value is true if the
+ * flag is a boolean on/off.
+ */
 function extractFlags(input) {
   flags_array = Array();
   while (input.indexOf("-") != -1) {
@@ -291,14 +296,24 @@ function extractFlags(input) {
   return flags_array;
 }
 
+/**
+ * Given a flags object (see: extractFlags) and a flag, returns true if the
+ * flag exists in the set of flags.
+ */
 function hasFlag(flags, find) {
   return find in flags;
 }
 
+/**
+ * Returns the number of user defined flags
+ */
 function countFlags(flags) {
   return Object.keys(flags).length;
 }
 
+/**
+ * Returns the value of a user defined flag
+ */
 function flagValue(flags, key) {
   if (hasFlag(flags, key)) {
     return flags[key];
@@ -307,6 +322,9 @@ function flagValue(flags, key) {
   }
 }
 
+/**
+ * Returns true if the input command matches command
+ */
 function checkCommand(input, command) {
   input = $.trim(input);
   matcherTrim = input.split(' ');
@@ -318,6 +336,9 @@ function checkCommand(input, command) {
   }
 }
 
+/**
+ * Returns an array of arguments from the given input
+ */
 function extractArguments(input) {
   input = $.trim(input);
   matcherTrim = input.split(' ');
