@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+body {
+	color: #FAFAFA;
+	background-color: #000000;
+}
+
+input:focus {
+    outline: none;
+}
+
+#output {
+	font-family: "Courier New";
+	font-size: 12px;
+}
+
+input {
+	font-family: "Courier New";
+	font-size: 12px;
+	background-color: #000000;
+	color: #FAFAFA
+}

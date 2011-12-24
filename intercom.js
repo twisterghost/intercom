@@ -1,0 +1,331 @@
+// Define constants
+var VERSION = "1.0.1.2";
+
+// Define variables
+var inputStream = parseInput;
+var quitNow = false;
+var plugin_text = "";
+var commands = Array();
+var showCommand = 0;
+var tempUrl = "";
+var parsers = [];
+var plugins = [];
+
+/**
+ * Things to do upon finishing page load
+ */
+$(document).ready(function(){
+  $('#input').focus();
+  output("Welcome to Intercom v." + VERSION);
+  for (i = 0; i < plugins.length; i++) {
+    plugin_text += plugins[i] + "<br />";
+  }
+  
+});
+
+/**
+ * Runs upon every time a key is pressed in #input.
+ * Listening for enter key upon which it then runs the current parser
+ * @param e
+ */
+function checkKey(e){
+    if (e.keyCode == 13){
+        input = $('#input').val();
+        $('#input').val('');
+        if (input == "forcequit") {
+            outputWithCarrot(input);
+            output("Focequitting back to main input stream.");
+            inputStream = parseInput;
+        } else {
+            commands.push(input);
+            showCommand = commands.length;
+            inputStream(input);
+        }
+    } else if (e.keyCode == 38) {
+      // Up
+      showCommand--;
+      if (showCommand <= 0) {
+        showCommand = 0;
+      }
+      $('#input').val(commands[showCommand]);
+    } else if (e.keyCode == 40) {
+      // Down
+      showCommand++;
+      if (showCommand >= commands.length) {
+        $('#input').val('');
+        showCommand = commands.length;
+      } else {
+        $('#input').val(commands[showCommand]);
+      }
+    } else {
+    }
+}
+
+/**
+ * Attempts to parse input for main functionality.
+ * @param input
+ */
+function parseInput(input){
+    output("&raquo;&nbsp;" + input);
+    for (i = 0; i < parsers.length; i++) {
+        parsers[i](input);
+        if (quitNow) {
+            quitNow = false;
+            return;
+        }
+    }
+    
+    // More info
+    if (input == "help" || input == "?") {
+        outputHelp();
+        return;
+    } 
+    // Built-in command info
+    else if (input == "help -commands") {
+        outputHelpCommands();
+        return
+    }
+    // Clear screem
+    else if (input == "clear") {
+        clearScreen();
+        return;
+    }
+    // Open page
+    else if (input.substring(0,5) == "open ") {
+      if (input.substring(5,12) == "-nofix ") {
+        url = input.substring(12);
+        openPage(url, true, false);
+        return;
+      }
+      url = input.substring(5);
+      openPage(url, false, true);
+      return;
+    }
+    
+    // No command found, give error
+    output("'" + input + "' is not a valid command or installed plugin." );
+    quitNow = false;
+}
+
+/**
+ * Outputs the help information and lists plugins
+ */
+function outputHelp() {
+    output("Intercom help & documentation");
+    output("<br />Intercom is a JavaScript-based web console built for " + 
+          "plugins. Each instance of Intercom may have as many or as few " + 
+          "plugins as desired.");
+    output("Intercom is currently in development stages, please check " + 
+          "http://i.amMichael.com for information on release.");
+    output("<b>For the list of basic commands, type 'help -commands'</b>");
+    output("<br />--------------------------<br />");
+    output("This Intercom has the following plugins installed:<br />" + 
+          plugin_text);
+
+}
+
+/**
+ * Outputs help on built-in commands
+ */
+function outputHelpCommands() {
+  output("Intercom basic commands");
+  output("-----------------------");
+  output("<b>help</b> - display help message");
+  output("<b>clear</b> - clears the content of the screen");
+  output("<b>open [URL]</b> - opens the given URL in the console");
+}
+
+function openPage(url, ignorehttp, fix) {
+  if (fix) {
+    if (url.substring(0,3) == "www") {
+      output("Notice: requested address WAS " + url + ", adding 'http://' " + 
+        "in front. Use open -nofix to stop this.");
+      url = "http://" + url;
+    }
+    if (!ignorehttp && url.substring(0,4) != "http") {
+      tempUrl = url;
+      output("The requested URL to open is not a valid http request. " + 
+            "Open anyway?");
+      output("y/n/(a)dd http:// in front");
+      setInputStream(openPageCheckUrl);
+      return;
+    }
+  }
+  output("<iframe src='" + url + "' width='100%' height='80%'>");
+}
+
+function openPageCheckUrl(input) {
+  if (input == "y" || input == "yes") {
+    resetInputStream();
+    openPage(tempUrl, true, true);
+  } else if (input == "n" || input == "no") {
+    resetInputStream();
+    output("Action aborted.");
+  } else if (input == "a") {
+    resetInputStream();
+    openPage("http://" + tempUrl);
+  }
+}
+
+
+
+
+// Begin API functions
+
+/*
+ * Adds a plugin name to the list of installed plugins
+ */
+function identifyPlugin(title) {
+  plugins.push(title);
+}
+
+/*
+ * Adds a parser to the preparsing list
+ */
+function addParser(parser) {
+  parsers.push(parser);
+}
+  
+/**
+ * Outputs the given text with the marker in front
+ */
+function outputWithCarrot(text) {
+    $('#output').append("&raquo;&nbsp;" + text + "<br />");
+    $(window).scrollTop($(document).height());
+}
+
+/**
+ * Clears the output screen
+ */
+function clearScreen() {
+    $('#output').html('');
+}
+
+function none(input) {
+  // Blank!
+}
+
+/**
+ * Displays the given text on the output of the console
+ * @param text
+ */
+function output(text){
+    $('#output').append(text + "<br />");
+    $(window).scrollTop($(document).height());
+}
+
+/**
+ * Ends parsing if called in a non-main parser
+ */
+function quitParse() {
+    quitNow = true;
+}
+
+/**
+ * Switches the input stream to a different parser
+ * @param newStream
+ */
+function setInputStream(newStream) {
+    inputStream = newStream;
+}
+
+/**
+ * Set the input stream back to the main parser
+ */
+function resetInputStream() {
+    inputStream = parseInput;
+    quitNow = false;
+}
+
+/**
+ * Does a post call to url with the given params array, outputs the
+ * return
+ */
+function outputPostCall(url, params) {
+  setInputStream(none);
+  $.post(url, params, function(data) {
+        output(data);
+        resetInputStream();
+      });
+}
+
+/**
+ * Does a post call to url with the given params array, returns the
+ * return
+ */
+function returnPostCall(url, params) {
+  setInputStream(none);
+  $.post(url, params, function(data) {
+        return data;
+        resetInputStream();
+      });
+}
+
+function extractFlags(input) {
+  flags_array = Array();
+  while (input.indexOf("-") != -1) {
+    // Cut to the dash
+    input = input.substring(input.indexOf("-") + 1);
+    
+    // Is there an = sign?
+    nextEquals = input.indexOf("=");
+    nextSpace = input.indexOf(" ");
+    
+    if (nextSpace == -1) {
+      nextSpace = input.length;
+    }
+    
+    if (nextEquals != -1 && nextEquals < nextSpace) {
+      // Its a value pair
+      key = input.substring(0, nextEquals);
+      value = input.substring(nextEquals+1, nextSpace);
+      flags_array[key] = value;
+      
+    } else {
+      // Just a flag
+      key = input.substring(0, nextSpace);
+      flags_array[key] = true;
+    }  
+    
+  }
+  return flags_array;
+}
+
+function hasFlag(flags, find) {
+  return find in flags;
+}
+
+function countFlags(flags) {
+  return Object.keys(flags).length;
+}
+
+function flagValue(flags, key) {
+  if (hasFlag(flags, key)) {
+    return flags[key];
+  } else {
+    return false;
+  }
+}
+
+function checkCommand(input, command) {
+  input = $.trim(input);
+  matcherTrim = input.split(' ');
+  matcherPart = matcherTrim[0];
+  if (matcherPart == command) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function extractArguments(input) {
+  input = $.trim(input);
+  matcherTrim = input.split(' ');
+  returnArr = Array();
+  for (argCount = 0; argCount < matcherTrim.length; argCount++) {
+    if (matcherTrim[argCount].substring(0, 1) != "-") {
+      returnArr.push(matcherTrim[argCount]);
+    }
+  }
+  return returnArr;
+}
