@@ -3,3 +3,6 @@
 
 Intercom is a JavaScript-based console I/O system designed for 
 easy extension using a module system.
+
+[Live Demo](http://i.amMichael.com/demo/intercom)
+
