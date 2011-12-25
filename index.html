@@ -16,6 +16,13 @@
     
   </head>
   <body>
+    <!-- Code to run when page is ready -->
+    <script>
+    $("document").ready(function() {
+      output("Type 'help' for installed plugins. Type 'demo' to start the demo");
+    });
+    </script>
+  
     <div>
     <div id='output' style='width:100%'></div>
     &raquo;&nbsp;<input id="input" onkeydown="checkKey(event)" 
