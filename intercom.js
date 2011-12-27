@@ -1,5 +1,5 @@
 // Define constants
-var VERSION = "1.0.1.3";
+var VERSION = "1.0.1.4";
 
 // Define variables
 var inputStream = parseInput;
@@ -26,11 +26,10 @@ $(document).ready(function(){
 /**
  * Runs upon every time a key is pressed in #input.
  * Listening for enter key upon which it then runs the current parser
- * @param e
  */
 function checkKey(e){
     if (e.keyCode == 13){
-        input = $('#input').val();
+        var input = $('#input').val();
         $('#input').val('');
         if (input == "forcequit") {
             outputWithCarrot(input);
@@ -63,7 +62,6 @@ function checkKey(e){
 
 /**
  * Attempts to parse input for main functionality.
- * @param input
  */
 function parseInput(input){
     output("&raquo;&nbsp;" + input);
@@ -273,15 +271,38 @@ function extractFlags(input) {
     input = input.substring(input.indexOf("-") + 1);
     
     // Is there an = sign?
+    isQuotedValue = input.indexOf('="');
+    isSingleQuotedValue = input.indexOf("='");
     nextEquals = input.indexOf("=");
     nextSpace = input.indexOf(" ");
+    
     
     if (nextSpace == -1) {
       nextSpace = input.length;
     }
     
-    if (nextEquals != -1 && nextEquals < nextSpace) {
+    // If there is the =" pair and it is followed by a "
+    if (isQuotedValue != -1 && 
+        isQuotedValue < input.substring(isQuotedValue+2).indexOf('"')) {
+
       // Its a value pair
+      key = input.substring(0, isQuotedValue);
+      value = input.substring(isQuotedValue+2, (isQuotedValue+2) + 
+          input.substring(isQuotedValue+2).indexOf('"'));
+      flags_array[key] = value;
+    
+    } else if (isSingleQuotedValue != -1 && 
+        isSingleQuotedValue < 
+            input.substring(isSingleQuotedValue+2).indexOf("'")) {
+      // Its a value pair
+      key = input.substring(0, isSingleQuotedValue);
+      value = input.substring(isSingleQuotedValue+2, (isSingleQuotedValue+2) + 
+          input.substring(isSingleQuotedValue+2).indexOf("'"));
+      flags_array[key] = value;
+    
+    } else if (nextEquals != -1 && nextEquals < nextSpace) {
+      // Its a value pair
+
       key = input.substring(0, nextEquals);
       value = input.substring(nextEquals+1, nextSpace);
       flags_array[key] = value;
@@ -349,4 +370,13 @@ function extractArguments(input) {
     }
   }
   return returnArr;
+}
+
+
+/**
+ * Includes the given filepath by writing the html
+ */
+function include(filepath) {
+  document.write("<script type='text/javascript' src='" + filepath + "'>" + 
+      "</script>");
 }

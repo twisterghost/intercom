@@ -15,8 +15,12 @@ easy extension using a module system.
 ##1. Installation
 Installing a setup of intercom is as simple as dropping the project files into 
 your folder of choice.
-To add a module to your installation, add a javascript include line under the 
-specified comment in index.html:
+To add a module to your installation, use the `include()` function.
+
+`include("filename.js")`
+
+Or use an html script src directly:
+
 &lt;script type='text/javascript' src='module_name.js'&gt;&lt;/script&gt;
 
 ##2. Creating Modules
@@ -203,3 +207,8 @@ Returns true if the input command matches the given command.
 `extractArguments(input)`
 
 Returns an array of arguments from the given input.
+
+
+`include(filepath)`
+
+Loads the given js file into the DOM
