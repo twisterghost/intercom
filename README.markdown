@@ -132,7 +132,7 @@ functions which pick up on user input to start a program/module.
 
 `outputWithCarrot(text)`
 
-Outputs formatted text with the input marker.
+**DEPRECATED** Outputs formatted text with the input marker.
 
 
 `clearScreen()`
@@ -212,3 +212,8 @@ Returns an array of arguments from the given input.
 `include(filepath)`
 
 Loads the given js file into the DOM
+
+
+`run(command)`
+
+Runs the given command on intercom

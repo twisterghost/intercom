@@ -9,7 +9,7 @@ addParser(demo_hook);
 
 // Here we declare a simple helptext variable which we will use later. It is 
 // useful to have a helptext for a program which requires argumenrs or flags.
-helpText = "<strong>Welcome to the <i>intercom</i> demo.</strong><br />" + 
+demo_helpText = "<strong>Welcome to the <i>intercom</i> demo.</strong><br />" + 
   "To run the demo parser, use 'demo run'";
 
 // Other random variables
@@ -34,7 +34,7 @@ function demo_hook(input) {
     
     // No arguments -- display help
     if (demo_arguments.length == 1) {
-      output(helpText);
+      output(demo_helpText);
     }
     
     // Check for other args, if it equals "run" it will enter the demo_parser
@@ -68,16 +68,6 @@ function demo_parser(input) {
    resetInputStream();
   }
   
-  // Demo step 1
-  if (demo_step == 0) {
-    if (hasFlag(demo_flags, "f")) {
-      demo_step = 1;
-      output("Great! You can also set flag values. Type 'demo -f=hello'");
-    } else {
-      output("Sorta...type 'demo -f'");
-    }
-  }
-  
   // Demo step 2
   if (demo_step == 1) {
     if (hasFlag(demo_flags, "f") && flagValue(demo_flags, "f") == "hello") {
@@ -89,6 +79,18 @@ function demo_parser(input) {
       output("Sorta...type 'demo -f=hello'");
     }
   }
+  
+  // Demo step 1
+  if (demo_step == 0) {
+    if (hasFlag(demo_flags, "f")) {
+      demo_step = 1;
+      output("Great! You can also set flag values. Type 'demo -f=hello'");
+    } else {
+      output("Sorta...type 'demo -f'");
+    }
+  }
+  
+  
   
        
 }
