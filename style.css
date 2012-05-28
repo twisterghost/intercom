@@ -20,3 +20,15 @@ input {
 	background-color: #000000;
 	color: #FAFAFA
 }
+
+/*  Styles  */
+
+.error {
+  font-weight: bold;
+  color: #920000
+}
+
+.success {
+  font-weight: bold;
+  color: #006200;
+}

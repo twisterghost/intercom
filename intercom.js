@@ -1,5 +1,5 @@
 // Define constants
-var VERSION = "1.0.1.4";
+var VERSION = "1.0.2.0";
 
 // Define variables
 var inputStream = parseInput;
@@ -119,7 +119,6 @@ function outputHelp() {
     output("<br />--------------------------<br />");
     output("This Intercom has the following plugins installed:<br />" + 
           plugin_text);
-
 }
 
 /**
@@ -186,6 +185,7 @@ function addParser(parser) {
   
 /**
  * Outputs the given text with the marker in front
+ * DEPRECATED
  */
 function outputWithCarrot(text) {
     $('#output').append("&raquo;&nbsp;" + text + "<br />");
@@ -209,8 +209,17 @@ function none(input) {
 /**
  * Displays the given text on the output of the console
  */
-function output(text){
-    $('#output').append(text + "<br />");
+function output(text, style, carrot){
+    // Style option
+    style = typeof(style) != 'undefined' ? style : "";
+    carrot = typeof(carrot) != 'undefined' ? carrot : false;
+    if (carrot) {
+      $('#output').append("&raquo;&nbsp;<span class='" + style + "'>" + text + 
+          "</span><br />");    
+    } else {
+      $('#output').append("<span class='" + style + "'>" + text + 
+          "</span><br />");
+    }
     $(window).scrollTop($(document).height());
 }
 
@@ -275,7 +284,6 @@ function extractFlags(input) {
     isSingleQuotedValue = input.indexOf("='");
     nextEquals = input.indexOf("=");
     nextSpace = input.indexOf(" ");
-    
     
     if (nextSpace == -1) {
       nextSpace = input.length;
@@ -372,11 +380,70 @@ function extractArguments(input) {
   return returnArr;
 }
 
-
 /**
  * Includes the given filepath by writing the html
  */
 function include(filepath) {
   document.write("<script type='text/javascript' src='" + filepath + "'>" + 
       "</script>");
+}
+
+/**
+ * Runs a given command in the console
+ */
+function run(command) {
+  parseInput(command);
+}
+
+/**
+ * Prints debug information
+ */
+function debug() {
+  output("DEBUG INFORMATION", "error");
+  output("=================", "error");
+  output("Version: " + VERSION, "error");
+  output("Input stream: " + inputStream, "error");
+  output("Command history: ", "error");
+  for (command in commands) {
+    output(commands[command], "error");
+  }
+  output("Active parsers:", "error");
+  for (parser in parsers) {
+    output(parsers[parser], "error");
+    output("===========", "error");
+  }
+}
+
+/**
+ * Objects
+ */
+ 
+/**
+ * HelpText object
+ * 
+ * Holds functions to generate a helptext string following the standard format.
+ * This object is to be used by modules to keep a level of standards when 
+ * writing helptext outputs.
+ */
+function HelpText() {
+  this.intro = "";
+  this.flags = "<b>Flags:</b><br />";
+  this.commands = "<b>Commands:</b><br />";
+  this.misc = "";
+  this.getHelpText = function() {
+    return this.intro + "<br />" + this.flags + "<br />" + this.commands + 
+        "<br />" + this.misc;
+  }
+  this.addFlag = function(flag, desc) {
+    this.flags += "-" + flag + " : " + desc + "<br />";
+  }
+  this.addCommand = function(command, desc) {
+    this.commands += command + " : " + desc + "<br />";
+  }
+  this.addMisc = function(toAdd) {
+    this.misc += toAdd;
+  }
+  this.setIntro = function(newIntro) {
+    this.intro = newIntro;
+  }
 }

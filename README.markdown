@@ -132,7 +132,7 @@ functions which pick up on user input to start a program/module.
 
 `outputWithCarrot(text)`
 
-Outputs formatted text with the input marker.
+**DEPRECATED** Outputs formatted text with the input marker.
 
 
 `clearScreen()`
@@ -212,3 +212,35 @@ Returns an array of arguments from the given input.
 `include(filepath)`
 
 Loads the given js file into the DOM
+
+
+`run(command)`
+
+Runs the given command on intercom
+
+#Objects
+
+`HelpText`
+
+This object is for module developers to use to write their module's help text. 
+Create a new HelpText object with `HelpText()`, then use its four methods to 
+modify your help text:
+
+`HelpText.addFlag(flag, description)`
+
+Adds a flag to the help text. Do not include the dash, just the flag, and a 
+description of what it does.
+
+`HelpText.addCommand(command, description)`
+
+Adds a command to the help text.
+
+`HelpText.addMisc(text)`
+
+Adds text to the end of the help text.
+
+`HelpText.setIntro(text)`
+
+Sets the introduction text for the help text. Unlike the other methods, this 
+will overwrite what has already been set as the intro text if you call it 
+multiple times.
