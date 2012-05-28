@@ -285,7 +285,6 @@ function extractFlags(input) {
     nextEquals = input.indexOf("=");
     nextSpace = input.indexOf(" ");
     
-    
     if (nextSpace == -1) {
       nextSpace = input.length;
     }
