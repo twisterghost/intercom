@@ -1,5 +1,5 @@
 // Define constants
-var VERSION = "1.0.1.4";
+var VERSION = "1.0.2.0";
 
 // Define variables
 var inputStream = parseInput;
