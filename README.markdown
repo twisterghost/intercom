@@ -146,9 +146,11 @@ Serves as a null parser. Set the input stream to `none` in order to ignore all
 input.
 
 
-`output(text)`
+`output(text [, style, carrot])`
 
-Outputs text to the console.
+Outputs text to the console. Optional params: style - CSS style to apply to 
+the text to be printed; carrot - boolean, if true, display the carrot. Defualt 
+is false.
 
 
 `quitParse()`
