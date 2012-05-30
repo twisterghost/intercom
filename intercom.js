@@ -224,6 +224,13 @@ function output(text, style, carrot){
 }
 
 /**
+ * Quick version of 'output'. Does not allow style or carrot.
+ */
+function o(text) {
+  output(text);
+}
+
+/**
  * Ends parsing if called in a non-main parser
  */
 function quitParse() {
@@ -445,5 +452,8 @@ function HelpText() {
   }
   this.setIntro = function(newIntro) {
     this.intro = newIntro;
+  }
+  this.toString = function() {
+    return this.getHelpText();
   }
 }
