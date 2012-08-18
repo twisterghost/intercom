@@ -1,5 +1,5 @@
 // Define constants
-var VERSION = "1.0.2.0";
+var VERSION = "1.0.3.0";
 
 // Define variables
 var inputStream = parseInput;
@@ -11,16 +11,24 @@ var tempUrl = "";
 var parsers = [];
 var plugins = [];
 
+// Define constants
+var ENTER_KEY = 13;
+var UP_KEY = 38
+var DOWN_KEY = 40
+var WELCOME_MESSAGE = "Welcome to Intercom v." + VERSION;
+
+
 /**
- * Things to do upon finishing page load
+ * Things to do upon finishing page load.
  */
 $(document).ready(function(){
   $('#input').focus();
-  output("Welcome to Intercom v." + VERSION);
+  o(WELCOME_MESSAGE);
+
+  // Round up addon plugins.
   for (i = 0; i < plugins.length; i++) {
     plugin_text += plugins[i] + "<br />";
   }
-  
 });
 
 /**
@@ -28,7 +36,7 @@ $(document).ready(function(){
  * Listening for enter key upon which it then runs the current parser
  */
 function checkKey(e){
-    if (e.keyCode == 13){
+    if (e.keyCode == ENTER_KEY){
         var input = $('#input').val();
         $('#input').val('');
         if (input == "forcequit") {
@@ -40,14 +48,14 @@ function checkKey(e){
             showCommand = commands.length;
             inputStream(input);
         }
-    } else if (e.keyCode == 38) {
+    } else if (e.keyCode == UP_KEY) {
       // Up
       showCommand--;
       if (showCommand <= 0) {
         showCommand = 0;
       }
       $('#input').val(commands[showCommand]);
-    } else if (e.keyCode == 40) {
+    } else if (e.keyCode == DOWN_KEY) {
       // Down
       showCommand++;
       if (showCommand >= commands.length) {
@@ -88,6 +96,13 @@ function parseInput(input){
         clearScreen();
         return;
     }
+    // Run infile
+    else if (checkCommand(input, "ici")) {
+      args = extractArguments(input);
+      runInfile(args[1]);
+      return;
+    }
+    
     // Open page
     else if (input.substring(0,5) == "open ") {
       if (input.substring(5,12) == "-nofix ") {
@@ -399,7 +414,26 @@ function include(filepath) {
  * Runs a given command in the console
  */
 function run(command) {
-  parseInput(command);
+  console.log("Run: " + command);
+  inputStream(command.toString());
+}
+
+/**
+ * Loads and runs a given Infile.
+ */
+function runInfile(path) {
+
+  $.get(path, function(fileContents) {
+    if (fileContents == null) {
+      o("The given path returned empty.");
+      return;
+    }
+    
+    fileContents = fileContents.split("\n");
+    for (line in fileContents) {
+      run(fileContents[line]);
+    }
+  });
 }
 
 /**
