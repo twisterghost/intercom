@@ -1,3 +1,10 @@
+#EXPERIMENTAL BRANCH
+This branch is an experiment which offers input file functionality.
+
+While this feature is not yet completed, it is available to try, and hopefully improve on!
+
+Invoke this functionality by using the `ici` command. Usage: `ici myScript.txt`
+
 #intercom
 ###A console for the web
 
