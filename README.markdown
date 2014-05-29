@@ -128,11 +128,6 @@ Identifies a module to intercom to be added to the list of installed modules.
 
 Adds a parser function to the main intercom parser. Used primarily to add _hook 
 functions which pick up on user input to start a program/module.
-  
-
-`outputWithCarrot(text)`
-
-**DEPRECATED** Outputs formatted text with the input marker.
 
 
 `clearScreen()`
@@ -146,7 +141,7 @@ Serves as a null parser. Set the input stream to `none` in order to ignore all
 input.
 
 
-`output(text [, style, carrot])`
+`output(text [, style, arrow])`
 
 Outputs text to the console. Optional params: style - CSS style to apply to 
 the text to be printed; carrot - boolean, if true, display the carrot. Defualt 
