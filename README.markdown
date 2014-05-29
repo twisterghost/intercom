@@ -144,8 +144,8 @@ input.
 `output(text [, style, arrow])`
 
 Outputs text to the console. Optional params: style - CSS style to apply to 
-the text to be printed; carrot - boolean, if true, display the carrot. Defualt 
-is false.
+the text to be printed; arrow - boolean, if true, display the arrow. Defualt 
+is false
 
 
 `quitParse()`
