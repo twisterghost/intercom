@@ -1,5 +1,5 @@
 #intercom
-###A console for the web
+### A console for us front-end devs
 
 Intercom is a JavaScript-based console I/O system designed for 
 easy extension using a module system.

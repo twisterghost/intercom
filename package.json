@@ -1,0 +1,13 @@
+{
+  "name": "intercom",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./web/www"
+  },
+  "dependencies": {
+    "express": "~4.9.0",
+    "morgan": "~1.3.0",
+    "jade": "~1.6.0"
+  }
+}

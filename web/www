@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var app = require('../intercom-server');
+
+app.set('port', process.env.PORT || 5433);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
