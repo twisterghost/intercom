@@ -1,5 +1,6 @@
-#intercom
-###A console for the web
+# intercom
+
+### A console for the web
 
 Intercom is a JavaScript-based console I/O system designed for 
 easy extension using a module system.
@@ -7,12 +8,12 @@ easy extension using a module system.
 [Live Demo](http://i.amMichael.com/demo/intercom)
 
 
-#Contents
+# Contents
 1. Installation
 2. Creating Modules
 3. API
 
-##1. Installation
+## 1. Installation
 Installing a setup of intercom is as simple as dropping the project files into 
 your folder of choice.
 To add a module to your installation, use the `include()` function.
@@ -23,7 +24,7 @@ Or use an html script src directly:
 
 &lt;script type='text/javascript' src='module_name.js'&gt;&lt;/script&gt;
 
-##2. Creating Modules
+## 2. Creating Modules
 An intercom module is a standardized JavaScript file which is included into the 
 main file with a JS inclusion tag. Creating a module is as simple as creating 
 a new file.
@@ -117,7 +118,7 @@ That's all there is to it! Using the tools in the API for intercom, you can
 create online programs and modules which you can quickly run from your intercom 
 console.
 
-##3. API
+## 3. API
 
 `identifyPlugin(title)`
 
@@ -215,7 +216,7 @@ Loads the given js file into the DOM
 
 Runs the given command on intercom
 
-#Objects
+# Objects
 
 `HelpText`
 
